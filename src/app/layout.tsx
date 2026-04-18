@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Space_Grotesk, Outfit, JetBrains_Mono } from 'next/font/google';
 import "./globals.css";
 import { ThemeProvider } from "@/app/providers/theme-provider";
@@ -22,8 +22,31 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Premium Clothing Store - Designer Fashion",
-  description: "Discover premium designer clothing with fast shipping and quality guarantee",
+  title: "Rephoven | Curated Style Picks & Premium Products",
+  description: "Discover handpicked premium products featured in our video reviews. Quality meets style at unbeatable prices. Shop the latest trends curated just for you.",
+  keywords: ["fashion", "style", "curated products", "premium", "video reviews", "shopping"],
+  authors: [{ name: "Rephoven" }],
+  openGraph: {
+    title: "Rephoven | Curated Style Picks & Premium Products",
+    description: "Discover handpicked premium products featured in our video reviews.",
+    type: "website",
+    siteName: "Rephoven",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rephoven | Curated Style Picks",
+    description: "Discover handpicked premium products featured in our video reviews.",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -32,9 +55,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="bg-background" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${outfit.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${outfit.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
         <ThemeProvider
           attribute="class"
