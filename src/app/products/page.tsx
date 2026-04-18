@@ -12,7 +12,6 @@ const PRODUCTS_PER_PAGE = 24;
 
 export default function ProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedGender, setSelectedGender] = useState<'Women' | 'Men' | 'Unisex' | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -22,21 +21,20 @@ export default function ProductsPage() {
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       const matchesCategory = !selectedCategory || product.category === selectedCategory;
-      const matchesGender = !selectedGender || product.gender === selectedGender;
       const matchesSearch =
         searchQuery === '' ||
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.category.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesGender && matchesSearch;
+      return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, selectedGender, searchQuery]);
+  }, [selectedCategory, searchQuery]);
 
   const displayedProducts = useMemo(() => {
     return filteredProducts.slice(0, displayedCount);
   }, [filteredProducts, displayedCount]);
 
-  const activeFiltersCount = (selectedCategory ? 1 : 0) + (selectedGender ? 1 : 0);
+  const activeFiltersCount = selectedCategory ? 1 : 0;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -165,31 +163,17 @@ export default function ProductsPage() {
           </div>
           
           {/* Active Filters */}
-          {(selectedCategory || selectedGender) && (
+          {selectedCategory && (
             <div className="flex flex-wrap gap-2 mt-4">
-              {selectedCategory && (
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
-                >
-                  {selectedCategory}
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-              {selectedGender && (
-                <button
-                  onClick={() => setSelectedGender(null)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
-                >
-                  {selectedGender}
-                  <X className="w-4 h-4" />
-                </button>
-              )}
               <button
-                onClick={() => {
-                  setSelectedCategory(null);
-                  setSelectedGender(null);
-                }}
+                onClick={() => setSelectedCategory(null)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full hover:bg-primary/20 transition-colors"
+              >
+                {selectedCategory}
+                <X className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setSelectedCategory(null)}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 Clear all
@@ -238,35 +222,7 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {/* Gender Filter */}
-              <div className="bg-card border border-border rounded-2xl p-6">
-                <h3 className="font-display font-bold text-lg text-card-foreground mb-4">Gender</h3>
-                <div className="space-y-1">
-                  <button
-                    onClick={() => setSelectedGender(null)}
-                    className={`w-full text-left px-4 py-2.5 rounded-xl transition-all text-sm font-medium ${
-                      !selectedGender
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-card-foreground hover:bg-secondary'
-                    }`}
-                  >
-                    All
-                  </button>
-                  {(['Women', 'Men', 'Unisex'] as const).map((gender) => (
-                    <button
-                      key={gender}
-                      onClick={() => setSelectedGender(gender)}
-                      className={`w-full text-left px-4 py-2.5 rounded-xl transition-all text-sm font-medium ${
-                        selectedGender === gender
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-card-foreground hover:bg-secondary'
-                      }`}
-                    >
-                      {gender}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              
             </div>
           </aside>
 
@@ -312,25 +268,7 @@ export default function ProductsPage() {
                     </div>
                   </div>
                   
-                  {/* Gender */}
-                  <div>
-                    <h3 className="font-display font-bold text-lg mb-3">Gender</h3>
-                    <div className="grid grid-cols-3 gap-2">
-                      {(['Women', 'Men', 'Unisex'] as const).map((gender) => (
-                        <button
-                          key={gender}
-                          onClick={() => setSelectedGender(selectedGender === gender ? null : gender)}
-                          className={`px-4 py-3 rounded-xl text-sm font-medium transition ${
-                            selectedGender === gender
-                              ? 'bg-primary text-primary-foreground'
-                              : 'bg-secondary'
-                          }`}
-                        >
-                          {gender}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  
                 </div>
                 
                 <div className="p-4 border-t border-border">
